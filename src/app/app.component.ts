@@ -6,7 +6,7 @@ import { TaskListComponent } from './components/task-list/task-list.component';
   @Component({
     selector: 'app-root',
     standalone: true, // Esto indica que es un componente independiente
-    imports: [ AddTaskComponent, TaskListComponent], // No necesitas HttpClientModule aquí
+    imports: [ AddTaskComponent, TaskListComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
   })
