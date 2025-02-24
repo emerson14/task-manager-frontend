@@ -1,5 +1,21 @@
-<form (ngSubmit)="onSubmit()">
-    <input [(ngModel)]="task.title" name="title" placeholder="Título" required>
-    <input [(ngModel)]="task.description" name="description" placeholder="Descripción" required>
-    <button type="submit">Agregar Tarea</button>
-  </form>
+<mat-card>
+  <mat-card-title>{{ editing ? 'Actualizar Tarea' : 'Agregar Tarea' }}</mat-card-title>
+  <mat-card-content>
+    <mat-form-field class="full-width">
+      <mat-label>Título</mat-label>
+      <input matInput [(ngModel)]="task.title">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput [(ngModel)]="task.description"></textarea>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="saveTask()">
+      {{ editing ? 'Actualizar' : 'Agregar' }}
+    </button>
+    <button mat-button color="warn" *ngIf="editing" (click)="cancelEdit()">Cancelar</button>
+  </mat-card-actions>
+</mat-card>
