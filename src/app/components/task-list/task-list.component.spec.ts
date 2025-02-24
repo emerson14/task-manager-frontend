@@ -1,23 +1,55 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// pruebas unitarias conn Jasmine/Karma
 
-import { TaskListComponent } from './task-list.component';
+// run test:   ng test
 
-describe('TaskListComponent', () => {
-  let component: TaskListComponent;
-  let fixture: ComponentFixture<TaskListComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TaskListComponent]
-    })
-    .compileComponents();
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { Task, TaskService } from '../../services/task.service';
 
-    fixture = TestBed.createComponent(TaskListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+
+describe('TaskService', () => {
+  let service: TaskService;
+  let httpMock: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [TaskService],
+    });
+
+    service = TestBed.inject(TaskService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => {
+    httpMock.verify(); // Verifica que no haya solicitudes pendientes
+  });
+
+  it('debería obtener las tareas', () => {
+    const mockTasks: Task[] = [
+      { id: 1, title: 'Tarea 1', description: 'Descripción 1' },
+      { id: 2, title: 'Tarea 2', description: 'Descripción 2' },
+    ];
+
+    service.getTasks().subscribe((tasks) => {
+      expect(tasks).toEqual(mockTasks);
+    });
+//API
+    const req = httpMock.expectOne('http://localhost:8000/api/tasks');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockTasks);
+  });
+
+  it('debería agregar una tarea', () => {
+    const newTask: Task = { title: 'Nueva Tarea', description: 'Nueva Descripción' };
+
+    service.addTask(newTask).subscribe((task) => {
+      expect(task).toEqual(newTask);
+    });
+
+    const req = httpMock.expectOne('http://localhost:8000/api/tasks');
+    expect(req.request.method).toBe('POST');
+    req.flush(newTask);
   });
 });
