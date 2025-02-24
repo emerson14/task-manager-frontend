@@ -16,6 +16,7 @@ cd task-manager-frontend
 npm install
 ng serve
 
+Si al momento de agregar una tarea no se ve en la lista, por favor reiniciar la pagina. F5
 # TaskManagerFrontend
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
